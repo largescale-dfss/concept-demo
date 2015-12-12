@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Distributed File Storage System Demo</title>
+    </head>
+
+    <body>
+        {% if user.is_authenticated %}
+            <p>You're already logged in!</p>
+        {% else %}
+            <h1>Register with Distributed File Storage System Demo</h1>
+
+            {% if registered %}
+            DFSS says: <strong>thank you for registering!</strong>
+            <a href="/demo/list/">Return to the homepage.</a><br />
+            {% else %}
+            DFSS says: <strong>register here!</strong><br />
+
+            <form id="user_form" method="post" action="/demo/register/"
+                    enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ user_form.as_p }}
+                {{ profile_form.as_p }}
+                <input type="submit" name="submit" value="Register" />
+            </form>
+            {% endif %}
+        {% endif %}
+    </body>
+</html>
