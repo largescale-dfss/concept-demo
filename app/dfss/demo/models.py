@@ -16,4 +16,5 @@ class UserProfile(models.Model):
 
 
 class Resume(models.Model):
+    user = models.ForeignKey(User)
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')

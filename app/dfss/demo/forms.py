@@ -1,4 +1,4 @@
-from dfss.demo.models import UserProfile
+from dfss.demo.models import UserProfile, Resume
 from django.contrib.auth.models import User
 from django import forms
 
@@ -7,6 +7,10 @@ class ResumeForm(forms.Form):
     docfile = forms.FileField(
         label='Select a file'
     )
+
+    class Meta:
+        model = Resume
+        fields = ('docfile')
 
 
 class UserForm(forms.ModelForm):

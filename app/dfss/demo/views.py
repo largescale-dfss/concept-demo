@@ -21,24 +21,24 @@ def main(request):
 
 
 @login_required
-def list(request):
+def resumes(request):
     # Handle file upload
     if request.method == 'POST':
         form = ResumeForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Resume(docfile=request.FILES['docfile'])
+            newdoc = Resume(user=request.user, docfile=request.FILES['docfile'])
             newdoc.save()
-            # Redirect to the Resume list after POST
-            return HttpResponseRedirect(reverse('dfss.demo.views.list'))
+            # Redirect to the Resume resumes after POST
+            return HttpResponseRedirect(reverse('dfss.demo.views.resumes'))
     else:
         form = ResumeForm()  # A empty, unbound form
 
-    # Load Resumes for the list page
-    Resumes = Resume.objects.all()
+    # Load Resumes for the resumes page
+    Resumes = Resume.objects.all().filter(user=request.user)
 
-    # Render list page with the Resumes and the form
+    # Render resumes page with the Resumes and the form
     return render_to_response(
-        'list.html',
+        'resumes.html',
         {'Resumes': Resumes, 'form': form},
         context_instance=RequestContext(request)
     )
