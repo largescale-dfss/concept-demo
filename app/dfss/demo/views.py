@@ -8,16 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout
 
-from dfss.demo.models import Resume
+from dfss.demo.models import Resume, UserProfile
 from dfss.demo.forms import ResumeForm, UserForm, UserProfileForm
-
-
-def main(request):
-    return render_to_response(
-        'home.html',
-        {},
-        context_instance=RequestContext(request)
-    )
 
 
 @login_required
@@ -26,7 +18,8 @@ def resumes(request):
     if request.method == 'POST':
         form = ResumeForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Resume(user=request.user, docfile=request.FILES['docfile'])
+            newdoc = Resume(user=request.user,
+                            docfile=request.FILES['docfile'])
             newdoc.save()
             # Redirect to the Resume resumes after POST
             return HttpResponseRedirect(reverse('dfss.demo.views.resumes'))
@@ -160,3 +153,28 @@ def user_logout(request):
 
     # Take the user back to the homepage.
     return HttpResponseRedirect('/demo/')
+
+
+@login_required
+def profile(request):
+    context = RequestContext(request)
+    if request.method == 'POST':
+        userProfileForm = UserProfileForm(request.POST, request.FILES)
+        if userProfileForm.is_valid():
+            userProfile = UserProfile.objects.get(user_id=request.user.id)
+            userProfileData = userProfileForm.cleaned_data
+            newWebsite = userProfileData['website']
+            newPicture = userProfileData['picture']
+
+            if len(newWebsite) > 0:
+                userProfile.website = newWebsite
+            if newPicture is not None:
+                userProfile.picture = newPicture
+
+            userProfile.save()
+            url = '/demo/profile/'
+            return HttpResponseRedirect(url)
+    else:
+        userProfileForm = UserProfileForm()
+
+    return render_to_response("profile.html", {'userProfileForm': userProfileForm, 'username': request.user}, context)
