@@ -14,12 +14,11 @@
         <!-- Upload form. Note enctype attribute! -->
         <form action="{% url "resumes" %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <p>{{ form.non_field_errors }}</p>
-            <h1>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</h1>
-            <p>
-                {{ form.docfile.errors }}
-                {{ form.docfile }}
-            </p>
-            <p><input type="submit" value="Upload"/></p>
+            <h1><label for="id_docfile">Select a file:</label></h1>
+            <div class="form-group">
+                <label for="id_docfile">File input</label>
+                <input id="id_docfile" type="file" />
+            </div>
+            <button type="submit" class="btn btn-default" value="Upload">Submit</button>
         </form>
 {% endblock content %}
