@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Distributed File Storage System Demo</title>
-    </head>
+{% extends "base.html" %}
 
-    <body>
+{% block content %}
         {% if user.is_authenticated %}
             <p>You're already logged in!</p>
         {% else %}
@@ -25,5 +21,4 @@
             </form>
             {% endif %}
         {% endif %}
-    </body>
-</html>
+{% endblock content %}

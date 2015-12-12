@@ -1,7 +1,11 @@
-{% if user.is_authenticated %}
-<a href="/demo/resumes/">List resumes</a><br />
-<a href="/demo/logout/">Logout</a><br />
-{% else %}
-<a href="/demo/register/">Register Here</a><br />
-<a href="/demo/login/">Login</a><br />
-{% endif %}
+{% extends "base.html" %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <a href="/demo/resumes/">List resumes</a><br />
+        <a href="/demo/logout/">Logout</a><br />
+    {% else %}
+        <a href="/demo/register/">Register Here</a><br />
+        <a href="/demo/login/">Login</a><br />
+    {% endif %}
+{% endblock content %}

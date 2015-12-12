@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>Distributed File Storage System Demo</title>
-    </head>
-    <body>
+{% extends "base.html" %}
+
+{% block content %}
         {% if Resumes %}
             <h1>Resumes</h1>
             <ul>
@@ -26,5 +22,4 @@
             </p>
             <p><input type="submit" value="Upload"/></p>
         </form>
-    </body>
-</html>
+{% endblock content %}
