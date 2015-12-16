@@ -18,3 +18,6 @@ class UserProfile(models.Model):
 class Resume(models.Model):
     user = models.ForeignKey(User)
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')
+    created = models.DateTimeField(auto_now_add=True)
+    timestamp = models.TextField(null=True)
+    latest_timestamp = models.DateTimeField(auto_now_add=True)

@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout
+from django.utils.timezone import now
 
 from dfss.demo.models import Resume, UserProfile
 from dfss.demo.forms import ResumeForm, UserForm, UserProfileForm
@@ -18,8 +19,17 @@ def resumes(request):
     if request.method == 'POST':
         form = ResumeForm(request.POST, request.FILES)
         if form.is_valid():
-            newdoc = Resume(user=request.user,
-                            docfile=request.FILES['docfile'])
+            newdoc = Resume.objects.all().filter(user=request.user)
+            current_time = str(now())
+            if len(newdoc) is 0:
+                newdoc = Resume(user=request.user,
+                                docfile=request.FILES['docfile'],
+                                timestamp=current_time)
+            else:
+                newdoc = newdoc[0]
+                newdoc.docfile = request.FILES['docfile']
+                newdoc.latest_timestamp = now()
+                newdoc.timestamp = current_time + ',' + newdoc.timestamp
             newdoc.save()
             # Redirect to the Resume resumes after POST
             return HttpResponseRedirect(reverse('dfss.demo.views.resumes'))

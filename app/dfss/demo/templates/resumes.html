@@ -8,7 +8,9 @@
         {% if Resumes %}
             <ul>
                 {% for resume in Resumes %}
-                    <li><a href="{{ resume.docfile.url }}">{{ resume.docfile.name }}</a></li>
+                    <li>
+                        <a href="{{ resume.docfile.url }}">{{ resume.docfile.name }}</a> - Last uploaded: {{ resume.latest_timestamp }}
+                    </li>
                 {% endfor %}
             </ul>
         {% else %}
