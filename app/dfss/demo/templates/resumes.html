@@ -5,14 +5,15 @@
             <h1>Resumes</h1>
             <hr>
         </div>
-        {% if Resumes %}
-            <ul>
-                {% for resume in Resumes %}
-                    <li>
-                        <a href="{{ resume.docfile.url }}">{{ resume.docfile.name }}</a> - Last uploaded: {{ resume.latest_timestamp }}
-                    </li>
-                {% endfor %}
-            </ul>
+        {% if Resume %}
+            <h3>Latest resume</h3>
+                <a href="{{ Resume.docfile }}">{{ Resume.docfile.name }}</a> - Last uploaded: {{ Resume.latest_timestamp }}</p>
+            <h3>Previous Resumes</h3>
+                <ul>
+                    {% for timestamp in timestamps %}
+                        <li>{{ timestamp.datetime }}</li>
+                    {% endfor %}
+                </ul>
         {% else %}
             <p>No resumes.</p>
         {% endif %}

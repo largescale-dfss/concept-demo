@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.utils.dateformat import format
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -39,7 +41,7 @@ def resumes(request):
                 newdoc.latest_timestamp = current_time
                 newdoc.timestamp = epoch_time + ',' + newdoc.timestamp
             newdoc.docfile.name = build_filename(
-                    str(request.user.id), str(newdoc.docfile), epoch_time)
+                str(request.user.id), str(newdoc.docfile), epoch_time)
             newdoc.save()
             # Redirect to the Resume resumes after POST
             return HttpResponseRedirect(reverse('dfss.demo.views.resumes'))
@@ -48,11 +50,18 @@ def resumes(request):
 
     # Load Resumes for the resumes page
     Resumes = Resume.objects.all().filter(user=request.user)
+    one_resume = None
+    timestamps = []
+    if len(Resumes) > 0:
+        one_resume = Resumes[0]
+        timestamps = one_resume.timestamp.split(',')[1:]
+        for i in range(0, len(timestamps)):
+            timestamps[i] = {'datetime': datetime.datetime.fromtimestamp(int(timestamps[i])), 'unixtime': timestamps[i]}
 
     # Render resumes page with the Resumes and the form
     return render_to_response(
         'resumes.html',
-        {'Resumes': Resumes, 'form': form},
+        {'Resume': one_resume, 'timestamps': timestamps, 'form': form},
         context_instance=RequestContext(request)
     )
 
@@ -173,28 +182,3 @@ def user_logout(request):
 
     # Take the user back to the homepage.
     return HttpResponseRedirect('/demo/')
-
-
-@login_required
-def profile(request):
-    context = RequestContext(request)
-    if request.method == 'POST':
-        userProfileForm = UserProfileForm(request.POST, request.FILES)
-        if userProfileForm.is_valid():
-            userProfile = UserProfile.objects.get(user_id=request.user.id)
-            userProfileData = userProfileForm.cleaned_data
-            newWebsite = userProfileData['website']
-            newPicture = userProfileData['picture']
-
-            if len(newWebsite) > 0:
-                userProfile.website = newWebsite
-            if newPicture is not None:
-                userProfile.picture = newPicture
-
-            userProfile.save()
-            url = '/demo/profile/'
-            return HttpResponseRedirect(url)
-    else:
-        userProfileForm = UserProfileForm()
-
-    return render_to_response("profile.html", {'userProfileForm': userProfileForm, 'username': request.user}, context)
