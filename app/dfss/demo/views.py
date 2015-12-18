@@ -32,14 +32,14 @@ def resumes(request):
                 newdoc = Resume(user=request.user,
                                 docfile=request.FILES['docfile'],
                                 timestamp=epoch_time)
+
             else:
                 newdoc = newdoc[0]
                 newdoc.docfile = request.FILES['docfile']
                 newdoc.latest_timestamp = current_time
-
-                newdoc.docfile.name = build_filename(
-                    str(request.user.id), str(newdoc.docfile), epoch_time)
                 newdoc.timestamp = epoch_time + ',' + newdoc.timestamp
+            newdoc.docfile.name = build_filename(
+                    str(request.user.id), str(newdoc.docfile), epoch_time)
             newdoc.save()
             # Redirect to the Resume resumes after POST
             return HttpResponseRedirect(reverse('dfss.demo.views.resumes'))

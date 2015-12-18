@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 
+manager_django_pb2.py
+
 # C extensions
 *.so
 
