@@ -113,3 +113,5 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "dfss/static"),
 ]
 STATIC_URL = '/static/'
+
+CUSTOM_STORAGE_OPTIONS = None

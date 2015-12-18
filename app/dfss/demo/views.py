@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils.dateformat import format
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
@@ -13,6 +14,10 @@ from dfss.demo.models import Resume, UserProfile
 from dfss.demo.forms import ResumeForm, UserForm, UserProfileForm
 
 
+def build_filename(user_id, docfile_name, epoch_time):
+    return str(user_id + '/resume/' + str(docfile_name) + '@' + epoch_time)
+
+
 @login_required
 def resumes(request):
     # Handle file upload
@@ -20,16 +25,21 @@ def resumes(request):
         form = ResumeForm(request.POST, request.FILES)
         if form.is_valid():
             newdoc = Resume.objects.all().filter(user=request.user)
-            current_time = str(now())
+            current_time = now()
+            epoch_time = str(format(now(), 'U'))
+            current_time = str(current_time)
             if len(newdoc) is 0:
                 newdoc = Resume(user=request.user,
                                 docfile=request.FILES['docfile'],
-                                timestamp=current_time)
+                                timestamp=epoch_time)
             else:
                 newdoc = newdoc[0]
                 newdoc.docfile = request.FILES['docfile']
-                newdoc.latest_timestamp = now()
-                newdoc.timestamp = current_time + ',' + newdoc.timestamp
+                newdoc.latest_timestamp = current_time
+
+                newdoc.docfile.name = build_filename(
+                    str(request.user.id), str(newdoc.docfile), epoch_time)
+                newdoc.timestamp = epoch_time + ',' + newdoc.timestamp
             newdoc.save()
             # Redirect to the Resume resumes after POST
             return HttpResponseRedirect(reverse('dfss.demo.views.resumes'))

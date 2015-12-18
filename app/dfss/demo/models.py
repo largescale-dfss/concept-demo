@@ -1,6 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+import customStorage
+
+fs = customStorage.MyStorage()
+
 
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
@@ -17,7 +21,7 @@ class UserProfile(models.Model):
 
 class Resume(models.Model):
     user = models.ForeignKey(User)
-    docfile = models.FileField(upload_to='documents/%Y/%m/%d')
+    docfile = models.FileField(upload_to='media', storage=fs)
     created = models.DateTimeField(auto_now_add=True)
     timestamp = models.TextField(null=True)
     latest_timestamp = models.DateTimeField(auto_now_add=True)
