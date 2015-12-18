@@ -23,6 +23,10 @@ def build_filename(user_id, docfile_name, epoch_time):
 @login_required
 def get_resume(request, epoc_time=0):
     newdoc = Resume.objects.all().filter(user=request.user)
+    if len(newdoc) > 0:
+        resume = newdoc[0]
+        print resume.docfile
+        return HttpResponse({}, content_type='attachment')
     return HttpResponse({}, content_type='application/json')
 
 
@@ -60,10 +64,12 @@ def resumes(request):
     timestamps = []
     if len(Resumes) > 0:
         one_resume = Resumes[0]
-        timestamps = one_resume.timestamp.split(',')[1:]
+        timestamps = one_resume.timestamp.split(',')
         for i in range(0, len(timestamps)):
             timestamps[i] = {'datetime': datetime.datetime.fromtimestamp(
                 int(timestamps[i])), 'unixtime': timestamps[i]}
+        one_resume.unix_timestamp = timestamps[0]['unixtime']
+        timestamps = timestamps[1:]
 
     # Render resumes page with the Resumes and the form
     return render_to_response(

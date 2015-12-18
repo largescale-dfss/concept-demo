@@ -7,7 +7,7 @@
         </div>
         {% if Resume %}
             <h3>Latest resume</h3>
-                <a href="{{ Resume.docfile }}">{{ Resume.docfile.name }}</a> - Last uploaded: {{ Resume.latest_timestamp }}</p>
+                <a href="/demo/resume/{{ Resume.unix_timestamp }}">Last uploaded: {{ Resume.latest_timestamp }}</a></p>
             <h3>Previous Resumes</h3>
                 <ul>
                     {% for timestamp in timestamps %}
