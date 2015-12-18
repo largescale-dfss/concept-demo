@@ -11,7 +11,7 @@
             <h3>Previous Resumes</h3>
                 <ul>
                     {% for timestamp in timestamps %}
-                        <li>{{ timestamp.datetime }}</li>
+                        <li><a href="/demo/resume/{{timestamp.unixtime}}">{{ timestamp.datetime }}</a></li>
                     {% endfor %}
                 </ul>
         {% else %}

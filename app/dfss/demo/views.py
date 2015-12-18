@@ -2,7 +2,7 @@
 import datetime
 
 from django.utils.dateformat import format
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -18,6 +18,12 @@ from dfss.demo.forms import ResumeForm, UserForm, UserProfileForm
 
 def build_filename(user_id, docfile_name, epoch_time):
     return str(user_id + '/resume/' + str(docfile_name) + '@' + epoch_time)
+
+
+@login_required
+def get_resume(request, epoc_time=0):
+    newdoc = Resume.objects.all().filter(user=request.user)
+    return HttpResponse({}, content_type='application/json')
 
 
 @login_required
@@ -56,7 +62,8 @@ def resumes(request):
         one_resume = Resumes[0]
         timestamps = one_resume.timestamp.split(',')[1:]
         for i in range(0, len(timestamps)):
-            timestamps[i] = {'datetime': datetime.datetime.fromtimestamp(int(timestamps[i])), 'unixtime': timestamps[i]}
+            timestamps[i] = {'datetime': datetime.datetime.fromtimestamp(
+                int(timestamps[i])), 'unixtime': timestamps[i]}
 
     # Render resumes page with the Resumes and the form
     return render_to_response(
