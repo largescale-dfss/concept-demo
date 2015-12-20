@@ -26,7 +26,7 @@ def get_resume(request, epoc_time=0):
     if len(newdoc) > 0:
         resume = newdoc[0]
         print resume.docfile
-        return HttpResponse({}, content_type='attachment')
+        return HttpResponse(resume.docfile, content_type='attachment')
     return HttpResponse({}, content_type='application/json')
 
 
