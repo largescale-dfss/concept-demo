@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import datetime
 
 from django.utils.dateformat import format
@@ -11,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout
 from django.utils.timezone import now
-
+from django.core.files.base import ContentFile
 from dfss.demo.models import Resume, UserProfile
 from dfss.demo.forms import ResumeForm, UserForm, UserProfileForm
 
@@ -25,8 +26,11 @@ def get_resume(request, epoc_time=0):
     newdoc = Resume.objects.all().filter(user=request.user)
     if len(newdoc) > 0:
         resume = newdoc[0]
+        print "okokok"
         print resume.docfile
-        return HttpResponse(resume.docfile, content_type='attachment')
+        return HttpResponse(ContentFile(resume.docfile), content_type='attachment')
+        #return HttpResponse(resume.docfile, content_type='attachment')
+        #return HttpResponse(resume.docfile, content_type='attachment')
         #return HttpResponse({}, content_type='attachment')
     return HttpResponse({}, content_type='application/json')
 
