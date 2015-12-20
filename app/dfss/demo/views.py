@@ -28,7 +28,7 @@ def get_resume(request, epoc_time=0):
         resume = newdoc[0]
         print "okokok"
         print resume.docfile
-        return HttpResponse(ContentFile(resume.docfile), content_type='attachment')
+        return HttpResponse(ContentFile(resume.docfile.read()), content_type='attachment')
         #return HttpResponse(resume.docfile, content_type='attachment')
         #return HttpResponse(resume.docfile, content_type='attachment')
         #return HttpResponse({}, content_type='attachment')
