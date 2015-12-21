@@ -28,6 +28,9 @@ def get_resume(request, epoc_time=0):
         resume = newdoc[0]
         print "okokok"
         print resume.docfile
+        split_name = resume.docfile.name.split("@")
+        resume.docfile.name = split_name[0] + "@" + epoc_time
+        print resume.docfile.name
         return HttpResponse(ContentFile(resume.docfile.read()), content_type='attachment')
         #return HttpResponse(resume.docfile, content_type='attachment')
         #return HttpResponse(resume.docfile, content_type='attachment')
