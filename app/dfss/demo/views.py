@@ -18,7 +18,7 @@ from dfss.demo.forms import ResumeForm, UserForm, UserProfileForm
 
 
 def build_filename(user_id, resume_id, epoch_time):
-    return str(user_id + '/resume/' + str(resume_id) + '@' + epoch_time)
+    return str(user_id + '/resume/resume@' + epoch_time)
 
 
 @login_required
