@@ -17,8 +17,8 @@ from dfss.demo.models import Resume, UserProfile
 from dfss.demo.forms import ResumeForm, UserForm, UserProfileForm
 
 
-def build_filename(user_id, docfile_name, epoch_time):
-    return str(user_id + '/resume/' + str(docfile_name) + '@' + epoch_time)
+def build_filename(user_id, resume_id, epoch_time):
+    return str(user_id + '/resume/' + str(resume_id) + '@' + epoch_time)
 
 
 @login_required
@@ -26,15 +26,10 @@ def get_resume(request, epoc_time=0):
     newdoc = Resume.objects.all().filter(user=request.user)
     if len(newdoc) > 0:
         resume = newdoc[0]
-        print "okokok"
-        print resume.docfile
         split_name = resume.docfile.name.split("@")
         resume.docfile.name = split_name[0] + "@" + epoc_time
         print resume.docfile.name
         return HttpResponse(ContentFile(resume.docfile.read()), content_type='attachment')
-        #return HttpResponse(resume.docfile, content_type='attachment')
-        #return HttpResponse(resume.docfile, content_type='attachment')
-        #return HttpResponse({}, content_type='attachment')
     return HttpResponse({}, content_type='application/json')
 
 
@@ -59,7 +54,7 @@ def resumes(request):
                 newdoc.latest_timestamp = current_time
                 newdoc.timestamp = epoch_time + ',' + newdoc.timestamp
             newdoc.docfile.name = build_filename(
-                str(request.user.id), str(newdoc.docfile), epoch_time)
+                str(request.user.id), str(newdoc.id), epoch_time)
             newdoc.save()
             # Redirect to the Resume resumes after POST
             return HttpResponseRedirect(reverse('dfss.demo.views.resumes'))
